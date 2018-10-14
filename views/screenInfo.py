@@ -137,6 +137,16 @@ def fetchOptimalSeats(screenName, numSeats, choice):
         for s in aisleSeats:
             if(s in range(startSeat+1, startSeat+int(numSeats)-1)):
                 return False
+
+        bookedSeats = []
+        for i in seats:
+            if(seats[i][0]):
+                bookedSeats.append(i)
+
+        for s in bookedSeats:
+            if(s in range(startSeat, startSeat+int(numSeats))):
+                return False
+        
         
         result[selectedRow.name] = range(startSeat, startSeat+int(numSeats))
 

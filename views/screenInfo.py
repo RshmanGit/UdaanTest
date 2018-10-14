@@ -101,3 +101,46 @@ def fetchUnreservedSeats(screenName):
     except Exception as e:
         print(e)
         return None
+
+def renderChoice(choice):
+    return [str(choice[0]), int(choice[1:])]
+
+
+def fetchOptimalSeats(screenName, numSeats, choice):
+    try:
+        rowName, startSeat = renderChoice(choice)
+        result = {}
+
+        session = DBSession()
+
+        selectedScreen = session.query(screen).filter_by(name = screenName).one()
+        selectedRow = session.query(row).filter_by(screen = selectedScreen, name = rowName).one()
+        result[selectedRow.name] = []
+
+        seats = {}
+        seatsInRow = session.query(seat).filter_by(row = selectedRow).all()
+        for sseat in seatsInRow:
+            temp = [False] * 2
+            temp[0] = sseat.booked
+            temp[1] = sseat.aisle
+            seats[sseat.number] = temp
+
+        rowLength = len(seatsInRow)
+        if(rowLength-int(numSeats) < startSeat):
+            return False
+
+        aisleSeats = []
+        for i in seats:
+            if(seats[i][1]):
+                aisleSeats.append(i)
+
+        for s in aisleSeats:
+            if(s in range(startSeat+1, startSeat+int(numSeats)-1)):
+                return False
+        
+        result[selectedRow.name] = range(startSeat, startSeat+int(numSeats))
+
+        return result
+    except Exception as e:
+        print(e)
+        return None

@@ -50,22 +50,31 @@ def reserveSeats(screenName):
 
 
 ###################################################################
-#To fetch all unreserved seats
+#To fetch all unreserved seats To fetch all unreserved seats
 ###################################################################
 @app.route('/screens/<string:screenName>/seats', methods=["GET", "POST"])
 def unReservedSeats(screenName):
     if(request.method == "GET"):
         data = request.args.get('status')
+        numSeats = request.args.get('numSeats')
+        choice = request.args.get('choice')
 
         if(data == "unreserved"):
             result = {}
             result = fetchUnreservedSeats(screenName)
             return jsonify(seats = result)
+        if(numSeats and choice):
+            result = fetchOptimalSeats(screenName, numSeats, choice)
+            if(result):
+                return jsonify(availableSeats = result)
+            else:
+                return jsonify({"Error": "Seats Invalid or contigous"})
 
         else:
-            abort(405)
+            return jsonify({'status': 'unknown args'})
     if(request.method == "POST"):
         abort(405)
+
 
 if __name__ == "__main__":
     app.debug = True

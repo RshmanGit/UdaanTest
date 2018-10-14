@@ -8,7 +8,7 @@ ORM: SqlAlchemy<br/>
 IMPORTANT INSTRUCTIONS:<br/>
     - Due to lack of time I was not able to create a proper DBMS configuration file. I created a temporary config file to provide MySQL configurations<br/>
     - Edit the ./dbSetup/db.config file and paste the configuration in this specific order:
-        UdaanDB,<user>,<password><br/>
+        UdaanDB,&lt;user&gt;,&lt;password&gt;<br/>
     - Create the UdaanDB database in your mysql database to avoid errors while execution.<br/>
     - Run the following commmand to install all requirements and then run the application:<br/>
         pipenv --python=2<br/>

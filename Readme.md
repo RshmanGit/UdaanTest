@@ -19,5 +19,5 @@ IMPORTANT INSTRUCTIONS:<br/>
 >    - After completing the above commands, you would have successfully ran the application on localhost:9090.<br/>
 >    - Use the below mentioned documentation as a guide to uses the API.<br/>
 <br/>
-API Documentation: https://documenter.getpostman.com/view/3383671/RWgrxxKV
+API Documentation: https://documenter.getpostman.com/view/3383671/RWgrxxKV<br/>
 Github Link: https://github.com/RshmanGit/UdaanTest.git

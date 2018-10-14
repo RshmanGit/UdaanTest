@@ -36,7 +36,36 @@ def addScreen():
 ###################################################################
 #Main route to reserve seats
 ###################################################################
+@app.route('/screens/<string:screenName>/reserve', methods=['GET', 'POST'])
+def reserveSeats(screenName):
+    if(request.method == "POST"):
+        data = request.get_json()
+        res = reserveSeatsFor(screenName, data)
+        if(res):
+            return jsonify({"status": "reserved"})
+        else:
+            return jsonify({"status": "unknown screen or prereserved seats"})
+    if(request.methos == "GET"):
+        abort(405)
 
+
+###################################################################
+#To fetch all unreserved seats
+###################################################################
+@app.route('/screens/<string:screenName>/seats', methods=["GET", "POST"])
+def unReservedSeats(screenName):
+    if(request.method == "GET"):
+        data = request.args.get('status')
+
+        if(data == "unreserved"):
+            result = {}
+            result = fetchUnreservedSeats(screenName)
+            return jsonify(seats = result)
+
+        else:
+            abort(405)
+    if(request.method == "POST"):
+        abort(405)
 
 if __name__ == "__main__":
     app.debug = True

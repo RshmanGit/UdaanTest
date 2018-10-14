@@ -48,3 +48,56 @@ def addNewScreen(data):
     except Exception as e:
         print e
         return False
+
+def reserveSeatsFor(screenName, data):
+    try:
+        seats = data['seats']
+
+        session = DBSession()
+
+        fetchedScreen = session.query(screen).filter_by(name = str(screenName)).one()
+        rows = {}
+        for eachRow in fetchedScreen.rows:
+            rows[eachRow.name] = eachRow
+
+        for row in seats:
+            if(row in rows):
+                for seatNumber in seats[row]:
+                    sseat = session.query(seat).filter_by(row = rows[row], number = seatNumber).one()
+                    if(sseat.booked == False):
+                        sseat.booked = True
+                    else:
+                        return False
+            else:
+                return False
+
+        session.commit()
+        return True
+    except Exception as e:
+        print e
+        return False
+
+def fetchUnreservedSeats(screenName):
+    try:
+
+        session = DBSession()
+
+        rowsInScreen = {}
+        sscreen = session.query(screen).filter_by(name = screenName).one()
+        srowsInScreen = session.query(row).filter_by(screen = sscreen).all()
+        for srow in srowsInScreen:
+            rowsInScreen[srow.name] = srow
+
+        rows = {}
+        for srow in rowsInScreen:
+            rows[srow] = []
+            sseat = session.query(seat).filter_by(row = rowsInScreen[srow], booked = False).all()
+            for iseat in sseat:
+                rows[srow].append(iseat.number)
+
+        session.commit()
+        return rows
+
+    except Exception as e:
+        print(e)
+        return None
